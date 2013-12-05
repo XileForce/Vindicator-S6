@@ -4676,7 +4676,16 @@ unlock:
  * load-balance).
  */
 #ifdef CONFIG_FAIR_GROUP_SCHED
+
+#ifdef CONFIG_NO_HZ_COMMON
 static int nohz_test_cpu(int cpu);
+#else
+static inline int nohz_test_cpu(int cpu)
+{
+	return 0;
+}
+#endif
+
 /*
  * Called immediately before a task is migrated to a new cpu; task_cpu(p) and
  * cfs_rq_of(p) references at time of call are still valid and identify the
@@ -6650,6 +6659,18 @@ static struct {
 	atomic_t nr_cpus;
 	unsigned long next_balance;     /* in jiffy units */
 } nohz ____cacheline_aligned;
+/*
+ * nohz_test_cpu used when load tracking is enabled. FAIR_GROUP_SCHED
+ * dependency below may be removed when load tracking guards are
+ * removed.
+ */
+#ifdef CONFIG_FAIR_GROUP_SCHED
+static int nohz_test_cpu(int cpu)
+{
+	return cpumask_test_cpu(cpu, nohz.idle_cpus_mask);
+}
+#endif
+
 /*
  * nohz_test_cpu used when load tracking is enabled. FAIR_GROUP_SCHED
  * dependency below may be removed when load tracking guards are
