@@ -3798,12 +3798,13 @@ static inline int hmp_semiboost(void)
 }
 
 #ifdef CONFIG_SCHED_HMP_LITTLE_PACKING
-unsigned int hmp_packing_enabled = 1;
 #ifndef CONFIG_ARCH_VEXPRESS_TC2
+unsigned int hmp_packing_enabled = 1;
 unsigned int hmp_full_threshold = (NICE_0_LOAD * 9) / 8;
 #else
 /* TC2 has a sharp consumption curve @ around 800Mhz, so
    we aim to spread the load around that frequency. */
+unsigned int hmp_packing_enabled;
 unsigned int hmp_full_threshold = 650;  /*  80% of the 800Mhz freq * NICE_0_LOAD */
 #endif
 #endif
