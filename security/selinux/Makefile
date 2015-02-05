@@ -1,6 +1,7 @@
 #
 # Makefile for building the SELinux module as part of the kernel tree.
 #
+CFLAGS_KERNEL := -fno-strict-aliasing
 
 ifeq ($(SEC_BUILD_OPTION_PRODUCT_SHIP), true)
 ifeq ($(SEC_BUILD_OPTION_SELINUX_ENFORCE),true)
