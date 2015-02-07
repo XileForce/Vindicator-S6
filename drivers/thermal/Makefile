@@ -1,7 +1,7 @@
 #
 # Makefile for sensor chip drivers.
 #
-CFLAGS_KERNEL := -fno-strict-aliasing
+CFLAGS_thermal_core.o := -fno-strict-aliasing
 
 obj-$(CONFIG_THERMAL)		+= thermal_sys.o
 ifeq ($(CONFIG_SOC_EXYNOS7580),y)
