@@ -390,7 +390,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fdiagnostics-show-option -Werror \
 		   -fmodulo-sched -fmodulo-sched-allow-regmoves \
 		   -march=armv8-a+crc -fbranch-target-load-optimize \
-		   -mtune=cortex-a57.cortex-a53
+		   -mtune=cortex-a57.cortex-a53 -ffast-math
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
