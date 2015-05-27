@@ -18,3 +18,5 @@ obj-$(CONFIG_CAMERA_EEPROM_SUPPORT_FRONT)	+= fimc-is-device-eeprom.o
 EXTRA_CFLAGS += -Idrivers/media/platform/exynos/fimc-is2
 EXTRA_CFLAGS += -Idrivers/media/platform/exynos/fimc-is2/include
 EXTRA_CFLAGS += -Idrivers/media/platform/exynos/fimc-is2/vendor
+
+CFLAGS_fimc-is-sec-define.o += -fno-strict-aliasing

@@ -1,6 +1,8 @@
 #
 # Makefile for the Linux eCryptfs
 #
+CFLAGS_main.o := -fno-strict-aliasing
+
 ifeq ($(CONFIG_ECRYPT_FS_VIRTUAL_FAT_XATTR),y)
 EXTRA_CFLAGS += -DECRYPT_FS_VIRTUAL_FAT_XATTR
 endif

@@ -1,4 +1,4 @@
-
+CFLAGS_exfat.o := -fno-strict-aliasing
 obj-y += exfat_core.o exfat_fs.o
 
 exfat_fs-y	:= exfat_super.o

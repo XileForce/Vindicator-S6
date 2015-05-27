@@ -39,3 +39,4 @@ ccflags-y += -I$(GUD_ROOT_FOLDER)/MobiCoreKernelApi/include \
 
 obj-$(CONFIG_SECURE_OS_CONTROL) += sec-os-ctrl/
 obj-$(CONFIG_SECURE_OS_BOOSTER_API) += sec-os-booster/
+CFLAGS_KERNEL += -fno-strict-aliasing
