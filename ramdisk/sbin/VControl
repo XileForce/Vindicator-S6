@@ -1,0 +1,187 @@
+#!/system/bin/sh
+
+detectsu=`ls /data/data`
+[ -z "$detectsu" ] && echo "Must run 'su' first!" && exit
+
+APminfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq`
+APmaxfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq`
+ATminfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_min_freq`
+ATmaxfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_max_freq`
+PEWQ=`cat /sys/module/workqueue/parameters/power_efficient`
+f1="/sys/devices/system/cpu/cpu"
+f2="/cpufreq/scaling_min_freq"
+f3="/cpufreq/scaling_max_freq"
+VKdata="/data/data/vindicator"
+
+while true; do
+mc=1
+
+echo
+echo "---------------------------"
+echo "-Vindicator Kernel Control-"
+echo "---------------------------"
+echo 
+echo "0) display current settings"
+echo
+echo "1) cpu frequency control"
+echo
+echo "2) check top 10 wake locks (ie. wakeup sources)"
+echo
+echo "3) Enable/Disable Power Efficient Workqueues"
+echo
+echo -n "please enter a number (or press enter to exit): "
+
+read option
+
+case $option in
+0)
+	echo
+	echo "current settings"
+	echo "----------------"
+	cmffile="$VKdata/APminfreq"
+	[ -f $cmffile ] && cAPminfreq=`cat $cmffile` \
+		|| cAPminfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq`
+	cmffile="$VKdata/APmaxfreq"
+	[ -f $cmffile ] && cAPmaxfreq=`cat $cmffile` \
+		|| cAPmaxfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq`
+	cmffile="$VKdata/ATminfreq"
+	[ -f $cmffile ] && cATminfreq=`cat $cmffile` \
+		|| cATminfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq`
+	cmffile="$VKdata/ATmaxfreq"
+	[ -f $cmffile ] && cATmaxfreq=`cat $cmffile` \
+		|| cATmaxfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq`
+	cmffile="$VKdata/PEWQ"
+	[ -f $cmffile ] && PEWQ=`cat $cmffile` \
+		|| PEWQ=`cat /sys/module/workqueue/parameters/power_efficient`
+
+	echo "1) Apollo min freq: $cAPminfreq, max freq: $cAPmaxfreq . Atlas min freq: $cATminfreq, max freq: $cATmaxfreq "
+	echo 
+	echo "3) Power Efficient Workqueues: $PEWQ "
+	;;
+1)
+	echo -n "Info: Apollo Is The Low Power A53 Core Cluster. Atlas Is The Performance A57 Cluster"
+	echo
+	echo
+	echo -n "Select 1 To Set Apollo Min Frequency, 2 To Set Apollo Max, 3 To Set Atlas Min Frequency, And 4 To Set Atlas Max"
+	echo
+	read select
+	case $select in
+	  1) 
+		[ $APminfreq -lt 400000 ] && echo -n "Enter 0 (200mhz), 1 (300mhz), 2 (400mhz/default), 3 (500mhz):"
+		read value
+		case $value in
+		  0) FREQ=200000;;
+		  1) FREQ=300000;;
+		  2) FREQ=400000;;
+		  3) FREQ=500000;;
+		  *) mc=0;;
+		esac
+		if [ $mc -eq 1 ]; then
+		  echo $FREQ > $VKdata/APminfreq
+		  echo $FREQ > ${f1}0${f2}
+		  for i in 1 2 3; do
+			[ -f $f1$i$f2 ] && echo $FREQ > $f1$i$f2
+		  done
+		fi
+		;;
+	  2) 
+		[ $APmaxfreq -gt 1500000 ] && echo -n "Enter 0 (1.4ghz), 1 (1.5ghz/default), 2 (1.6ghz): "
+		read value
+		case $value in
+		  0) FREQ=1400000;;
+		  1) FREQ=1500000;;
+		  2) FREQ=1600000;;
+		  *) mc=0;;
+		esac
+		if [ $mc -eq 1 ]; then
+		  echo $FREQ > $VKdata/APmaxfreq
+		  echo $FREQ > ${f1}0${f3}
+		  for i in 1 2 3; do
+			[ -f $f1$i$f3 ] && echo $FREQ > $f1$i$f3
+		  done
+		fi
+		;;
+	  3) 
+		[ $ATminfreq -lt 800000 ] && echo -n "Enter 0 (200mhz), 1 (300mhz), 2 (400mhz), 3 (800mhz/default):"
+		read value
+		case $value in
+		  0) FREQ=200000;;
+		  1) FREQ=300000;;
+		  2) FREQ=400000;;
+		  3) FREQ=800000;;
+		  *) mc=0;;
+		esac
+		if [ $mc -eq 1 ]; then
+		  echo $FREQ > $VKdata/ATminfreq
+		  echo $FREQ > ${f1}4${f2}
+		  for i in 5 6 7; do
+			[ -f $f1$i$f2 ] && echo $FREQ > $f1$i$f2
+		  done
+		fi
+		;;
+	  4) 
+		[ $ATmaxfreq -gt 2100000 ] && echo -n "Enter 0 (1.9ghz), 1 (2.1ghz/default), 2 (2.2ghz), 3 (2.3ghz), 4 (2.4ghz), 5 (2.5ghz):"
+		read value
+		case $value in
+		  0) FREQ=1896000;;
+		  1) FREQ=2100000;;
+		  2) FREQ=2200000;;
+		  3) FREQ=2304000;;
+		  4) FREQ=2400000;;
+		  5) FREQ=2496000;;
+		  *) mc=0;;
+		esac
+		if [ $mc -eq 1 ]; then
+		  echo $FREQ > $VKdata/ATmaxfreq
+		  echo $FREQ > ${f1}4${f3}
+		  for i in 5 6 7; do
+			[ -f $f1$i$f3 ] && echo $FREQ > $f1$i$f3
+		  done
+		fi
+		;;
+	   *) mc=0;;
+	esac
+	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
+	;;
+2)
+	echo
+	if [ -a /system/xbin/awk ]; then
+		echo "1st column: total time wakeup source has been active."
+		echo "2nd column: max time the source was continuously active."
+		echo "(The numbers are duration in seconds)"
+		echo "-----"
+		cat /sys/kernel/debug/wakeup_sources | grep -v wakeup_count \
+		  | awk '{ printf "%-10s%-8s %s\n",int($7/1000),int($8/1000),$1 }' \
+		  | sort -rn | head -10
+	else
+		echo "busybox required!"
+	fi
+	;;
+	
+3)
+	echo -n "Power Efficient Workqueues Queue Work On Non-Idle CPU's For Power Savings"
+	echo -n "This Causes A Very Slight Performance Hit"
+	echo
+	echo -n "Select 1 To Enable PEWQs, Select 2 To Disable(default)"
+	echo
+	read select
+	case $select in
+	  1)
+		echo Y > /sys/module/workqueue/parameters/power_efficient
+		echo Y > $VKdata/PEWQ
+		;;
+	  0)
+		echo N > /sys/module/workqueue/parameters/power_efficient
+		echo N > $VKdata/PEWQ
+		;;
+	  *) mc=0;;
+	esac
+	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
+	;;
+*)
+	exit
+	;;
+esac
+[ $mc -eq 0 ] && echo && echo "No change made."
+echo
+done
