@@ -40,7 +40,6 @@ modules.builtin
 *zImage-dtb
 arch/arm64/boot/Image.gz-dtb
 *boot.img
-*ramdisk
 *Image
 vmlinux.lds
 vmlinux
