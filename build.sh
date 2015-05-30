@@ -99,7 +99,7 @@ cp image-new.img ../VindicatorS6_Out/boot.img
 # Create the flashable .zip of the new kernel boot.img
 echo -n "Create flashable .zip.............................."
 cd ../VindicatorS6_Out
-zip -r Vindicator.R.x.zip *
+zip -r Vindicator-Rx.zip *
 echo "Done"
 
 echo
