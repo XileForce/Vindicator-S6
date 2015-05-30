@@ -94,6 +94,7 @@ if [ -f $CFILE ]; then
 	echo $FREQ > /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq
 	echo $FREQ > /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq
 	echo $FREQ > /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq
+fi
 	
 #PEWQ's
 CFILE="/data/data/vindicator/PEWQ"
