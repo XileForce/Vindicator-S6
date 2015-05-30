@@ -54,9 +54,6 @@ chmod 444 /dev/frandom
 [ ! -d "/data/data/vindicator" ] && mkdir /data/data/vindicator
 chmod 755 /data/data/vindicator
 
-# Fix Permissions For Power Effecient Workqueues
-chmod 755 /sys/module/workqueue/parameters/power_efficient
-
 # init.d support
 /system/xbin/busybox run-parts /system/etc/init.d
 
