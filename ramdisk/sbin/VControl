@@ -7,7 +7,6 @@ APminfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq`
 APmaxfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq`
 ATminfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_min_freq`
 ATmaxfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_max_freq`
-PEWQ=`cat /sys/module/workqueue/parameters/power_efficient`
 f1="/sys/devices/system/cpu/cpu"
 f2="/cpufreq/scaling_min_freq"
 f3="/cpufreq/scaling_max_freq"
@@ -50,13 +49,11 @@ case $option in
 	cmffile="$VKdata/ATmaxfreq"
 	[ -f $cmffile ] && cATmaxfreq=`cat $cmffile` \
 		|| cATmaxfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq`
-	cmffile="$VKdata/PEWQ"
-	[ -f $cmffile ] && PEWQ=`cat $cmffile` \
-		|| PEWQ=`cat /sys/module/workqueue/parameters/power_efficient`
 
 	echo "1) Apollo min freq: $cAPminfreq, max freq: $cAPmaxfreq . Atlas min freq: $cATminfreq, max freq: $cATmaxfreq "
 	echo 
-	echo "3) Power Efficient Workqueues: $PEWQ "
+	echo "3) Power Efficient Workqueues: "
+	cat /sys/module/workqueue/parameters/power_efficient
 	;;
 1)
 	echo -n "Info: Apollo Is The Low Power A53 Core Cluster. Atlas Is The Performance A57 Cluster"
@@ -162,15 +159,15 @@ case $option in
 	echo -n "Power Efficient Workqueues Queue Work On Non-Idle CPU's For Power Savings"
 	echo -n "This Causes A Very Slight Performance Hit"
 	echo
-	echo -n "Select 1 To Enable PEWQs, Select 2 To Disable(default)"
+	echo -n "Select 0 To Enable PEWQs, Select 1 To Disable(default)"
 	echo
 	read select
 	case $select in
-	  1)
+	  0)
 		echo Y > /sys/module/workqueue/parameters/power_efficient
 		echo Y > $VKdata/PEWQ
 		;;
-	  0)
+	  1)
 		echo N > /sys/module/workqueue/parameters/power_efficient
 		echo N > $VKdata/PEWQ
 		;;
