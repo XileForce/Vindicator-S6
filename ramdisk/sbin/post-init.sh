@@ -100,4 +100,8 @@ CFILE="/data/data/vindicator/PEWQ"
 SFILE="/sys/module/workqueue/parameters/power_efficient"
 [ -f $CFILE ] && echo `cat $CFILE` > $SFILE
 
+#FSync
+CFILE="/data/data/vindicator/FSync"
+SFILE="/sys/module/sync/parameters/fsync_enabled"
+[ -f $CFILE ] && echo `cat $CFILE` > $SFILE
 

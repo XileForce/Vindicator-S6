@@ -3,6 +3,8 @@
 detectsu=`ls /data/data`
 [ -z "$detectsu" ] && echo "Must run 'su' first!" && exit
 
+txtred='\e[0;31m' # Red
+
 APminfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq`
 APmaxfreq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq`
 ATminfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_min_freq`
@@ -15,10 +17,9 @@ VKdata="/data/data/vindicator"
 while true; do
 mc=1
 
-echo
-echo "---------------------------"
-echo "-Vindicator Kernel Control-"
-echo "---------------------------"
+echo -e "${txtred}---------------------------"
+echo  "-Vindicator Kernel Control-"
+echo  "---------------------------"
 echo 
 echo "0) display current settings"
 echo
@@ -26,7 +27,9 @@ echo "1) cpu frequency control"
 echo
 echo "2) Enable/Disable Power Efficient Workqueues"
 echo
-echo "3) check top 10 wake locks (ie. wakeup sources)"
+echo "3) Enable/Disable FSync"
+echo
+echo "4) check top 10 wake locks (ie. wakeup sources)"
 echo
 echo -n "please enter a number (or press enter to exit): "
 
@@ -35,7 +38,7 @@ read option
 case $option in
 0)
 	echo
-	echo "current settings"
+	echo "Current Settings"
 	echo "----------------"
 	cmffile="$VKdata/APminfreq"
 	[ -f $cmffile ] && cAPminfreq=`cat $cmffile` \
@@ -50,10 +53,13 @@ case $option in
 	[ -f $cmffile ] && cATmaxfreq=`cat $cmffile` \
 		|| cATmaxfreq=`cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq`
 
-	echo "1) Apollo min freq: $cAPminfreq, max freq: $cAPmaxfreq . Atlas min freq: $cATminfreq, max freq: $cATmaxfreq "
+	echo "1) Apollo Min Freq: $cAPminfreq, Max Freq: $cAPmaxfreq . Atlas Min Freq: $cATminfreq, Max Freq: $cATmaxfreq "
 	echo 
 	echo "2) Power Efficient Workqueues: "
 	cat /sys/module/workqueue/parameters/power_efficient
+	echo
+	echo "3) FSync: "
+	cat /sys/module/sync/parameters/fsync_enabled
 	;;
 1)
 	echo -n "Info: Apollo Is The Low Power A53 Core Cluster. Atlas Is The Performance A57 Cluster"
@@ -160,7 +166,29 @@ case $option in
 	esac
 	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
 	;;
+	
 3)
+	echo -n "FSync Off Provides A Significant Boost To IO"
+	echo
+	echo -n "FSync On Provides Better Data Integrity In The Event Of Crash"
+	echo
+	echo -n "Select 0 To Enable FSync(Default), Select 1 To Disable"
+	echo
+	read select
+	case $select in
+	  0)
+		echo Y > /sys/module/sync/parameters/fsync_enabled
+		echo Y > $VKdata/FSync
+		;;
+	  1)
+		echo N > /sys/module/sync/parameters/fsync_enabled
+		echo N > $VKdata/FSync
+		;;
+	  *) mc=0;;
+	esac
+	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
+	;;
+4)
 	echo
 	if [ -a /system/xbin/awk ]; then
 		echo "1st column: total time wakeup source has been active."
