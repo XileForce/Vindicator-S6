@@ -24,9 +24,9 @@ echo "0) display current settings"
 echo
 echo "1) cpu frequency control"
 echo
-echo "2) check top 10 wake locks (ie. wakeup sources)"
+echo "2) Enable/Disable Power Efficient Workqueues"
 echo
-echo "3) Enable/Disable Power Efficient Workqueues"
+echo "3) check top 10 wake locks (ie. wakeup sources)"
 echo
 echo -n "please enter a number (or press enter to exit): "
 
@@ -52,7 +52,7 @@ case $option in
 
 	echo "1) Apollo min freq: $cAPminfreq, max freq: $cAPmaxfreq . Atlas min freq: $cATminfreq, max freq: $cATmaxfreq "
 	echo 
-	echo "3) Power Efficient Workqueues: "
+	echo "2) Power Efficient Workqueues: "
 	cat /sys/module/workqueue/parameters/power_efficient
 	;;
 1)
@@ -141,21 +141,6 @@ case $option in
 	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
 	;;
 2)
-	echo
-	if [ -a /system/xbin/awk ]; then
-		echo "1st column: total time wakeup source has been active."
-		echo "2nd column: max time the source was continuously active."
-		echo "(The numbers are duration in seconds)"
-		echo "-----"
-		cat /sys/kernel/debug/wakeup_sources | grep -v wakeup_count \
-		  | awk '{ printf "%-10s%-8s %s\n",int($7/1000),int($8/1000),$1 }' \
-		  | sort -rn | head -10
-	else
-		echo "busybox required!"
-	fi
-	;;
-	
-3)
 	echo -n "Power Efficient Workqueues Queue Work On Non-Idle CPU's For Power Savings"
 	echo -n "This Causes A Very Slight Performance Hit"
 	echo
@@ -174,6 +159,20 @@ case $option in
 	  *) mc=0;;
 	esac
 	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
+	;;
+3)
+	echo
+	if [ -a /system/xbin/awk ]; then
+		echo "1st column: total time wakeup source has been active."
+		echo "2nd column: max time the source was continuously active."
+		echo "(The numbers are duration in seconds)"
+		echo "-----"
+		cat /sys/kernel/debug/wakeup_sources | grep -v wakeup_count \
+		  | awk '{ printf "%-10s%-8s %s\n",int($7/1000),int($8/1000),$1 }' \
+		  | sort -rn | head -10
+	else
+		echo "busybox required!"
+	fi
 	;;
 *)
 	exit
