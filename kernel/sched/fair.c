@@ -6691,17 +6691,6 @@ static struct {
 	atomic_t nr_cpus;
 	unsigned long next_balance;     /* in jiffy units */
 } nohz ____cacheline_aligned;
-/*
- * nohz_test_cpu used when load tracking is enabled. FAIR_GROUP_SCHED
- * dependency below may be removed when load tracking guards are
- * removed.
- */
-#ifdef CONFIG_FAIR_GROUP_SCHED
-static int nohz_test_cpu(int cpu)
-{
-	return cpumask_test_cpu(cpu, nohz.idle_cpus_mask);
-}
-#endif
 
 /*
  * nohz_test_cpu used when load tracking is enabled. FAIR_GROUP_SCHED
@@ -7293,18 +7282,6 @@ static ATOMIC_NOTIFIER_HEAD(hmp_task_migration_notifier);
 int register_hmp_task_migration_notifier(struct notifier_block *nb)
 {
 	return atomic_notifier_chain_register(&hmp_task_migration_notifier, nb);
-}
-
-static int hmp_up_migration_noti(void)
-{
-	return atomic_notifier_call_chain(&hmp_task_migration_notifier,
-			HMP_UP_MIGRATION, NULL);
-}
-
-static int hmp_down_migration_noti(void)
-{
-	return atomic_notifier_call_chain(&hmp_task_migration_notifier,
-			HMP_DOWN_MIGRATION, NULL);
 }
 
 /*
