@@ -164,7 +164,7 @@ struct cpufreq_interactive_tunables {
 	 */
 #define DEFAULT_TIMER_SLACK (4 * DEFAULT_TIMER_RATE)
 	int timer_slack_val;
-	bool io_is_busy = true;
+	bool io_is_busy;
 
 #define TASK_NAME_LEN 15
 	/* realtime thread handles frequency scaling */
