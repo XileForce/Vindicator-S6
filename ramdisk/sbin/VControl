@@ -155,17 +155,17 @@ case $option in
 	echo -n "Power Efficient Workqueues Queue Work On Non-Idle CPU's For Power Savings"
 	echo -n "This Causes A Very Slight Performance Hit"
 	echo
-	echo -n "Select 0 To Enable PEWQs, Select 1 To Disable(default)"
+	echo -n "Select 0 To Disable PEWQs(Default), Select 1 To Enable"
 	echo
 	read select
 	case $select in
 	  0)
-		echo Y > /sys/module/workqueue/parameters/power_efficient
-		echo Y > $VKdata/PEWQ
-		;;
-	  1)
 		echo N > /sys/module/workqueue/parameters/power_efficient
 		echo N > $VKdata/PEWQ
+		;;
+	  1)
+		echo Y > /sys/module/workqueue/parameters/power_efficient
+		echo Y > $VKdata/PEWQ
 		;;
 	  *) mc=0;;
 	esac
@@ -177,17 +177,17 @@ case $option in
 	echo
 	echo -n "FSync On Provides Better Data Integrity In The Event Of Crash"
 	echo
-	echo -n "Select 0 To Enable FSync(Default), Select 1 To Disable"
+	echo -n "Select 0 To Disable FSync, Select 1 To Enable(Default)"
 	echo
 	read select
 	case $select in
 	  0)
-		echo Y > /sys/module/sync/parameters/fsync_enabled
-		echo Y > $VKdata/FSync
-		;;
-	  1)
 		echo N > /sys/module/sync/parameters/fsync_enabled
 		echo N > $VKdata/FSync
+		;;
+	  1)
+		echo Y > /sys/module/sync/parameters/fsync_enabled
+		echo Y > $VKdata/FSync
 		;;
 	  *) mc=0;;
 	esac
@@ -200,17 +200,17 @@ case $option in
 	echo
 	echo -n "This Only Affects The LITTLE(A53) Cores. Atlas Cores Are Untouched"
 	echo
-	echo -n "Select 0 To Enable Task Packing(Default), Select 1 To Disable"
+	echo -n "Select 0 To Disable Task Packing, Select 1 To Enable(Default)"
 	echo
 	read select
 	case $select in
 	  0)
-		echo Y > /sys/kernel/hmp/packing_enable
-		echo Y > $VKdata/packing
+		echo 0 > /sys/kernel/hmp/packing_enable
+		echo 0 > $VKdata/packing
 		;;
 	  1)
-		echo N > /sys/kernel/hmp/packing_enable
-		echo N > $VKdata/packing
+		echo 1 > /sys/kernel/hmp/packing_enable
+		echo 1 > $VKdata/packing
 		;;
 	  *) mc=0;;
 	esac
