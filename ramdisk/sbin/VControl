@@ -29,7 +29,9 @@ echo "2) Enable/Disable Power Efficient Workqueues"
 echo
 echo "3) Enable/Disable FSync"
 echo
-echo "4) check top 10 wake locks (ie. wakeup sources)"
+echo "4) Enable/Disable CPU Task Packing On LITTLE CPU's"
+echo
+echo "5) check top 10 wake locks (ie. wakeup sources)"
 echo
 echo -n "please enter a number (or press enter to exit): "
 
@@ -60,6 +62,9 @@ case $option in
 	echo
 	echo "3) FSync: "
 	cat /sys/module/sync/parameters/fsync_enabled
+	echo
+	echo "4) LITTLE CPU Task Packing: "
+	cat /sys/kernel/hmp/packing_enable
 	;;
 1)
 	echo -n "Info: Apollo Is The Low Power A53 Core Cluster. Atlas Is The Performance A57 Cluster"
@@ -189,6 +194,29 @@ case $option in
 	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
 	;;
 4)
+	echo -n "Task Packing Improves Battery Life At A Slight Cost To Performance"
+	echo
+	echo -n "It Attempts To Pack Tasks Onto As Few Of Cores As Possible Saving Battery"
+	echo
+	echo -n "This Only Affects The LITTLE(A53) Cores. Atlas Cores Are Untouched"
+	echo
+	echo -n "Select 0 To Enable Task Packing(Default), Select 1 To Disable"
+	echo
+	read select
+	case $select in
+	  0)
+		echo Y > /sys/kernel/hmp/packing_enable
+		echo Y > $VKdata/packing
+		;;
+	  1)
+		echo N > /sys/kernel/hmp/packing_enable
+		echo N > $VKdata/packing
+		;;
+	  *) mc=0;;
+	esac
+	[ $mc -eq 1 ] && echo && echo "Done! (also will persist at boot)"
+	;;
+5)
 	echo
 	if [ -a /system/xbin/awk ]; then
 		echo "1st column: total time wakeup source has been active."

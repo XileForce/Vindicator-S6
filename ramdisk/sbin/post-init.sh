@@ -75,7 +75,7 @@ if [ -f $CFILE ]; then
 	echo $FREQ > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
 	echo $FREQ > /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
 	echo $FREQ > /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
-	
+fi	
 # Atlas Minfreq
 CFILE="/data/data/vindicator/ATminfreq"
 if [ -f $CFILE ]; then 
@@ -106,3 +106,7 @@ CFILE="/data/data/vindicator/FSync"
 SFILE="/sys/module/sync/parameters/fsync_enabled"
 [ -f $CFILE ] && echo `cat $CFILE` > $SFILE
 
+#Task Packing
+CFILE="/data/data/vindicator/packing"
+SFILE="/sys/kernel/hmp/packing_enable"
+[ -f $CFILE ] && echo `cat $CFILE` > $SFILE
