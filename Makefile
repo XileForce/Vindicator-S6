@@ -384,12 +384,12 @@ KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_CFLAGS   := -Wall -Wundef -floop-nest-optimize -Wstrict-prototypes -Wno-trigraphs \
 		   -fstrict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
-		   -Wno-format-security \
+		   -Wno-format-security -funswitch-loops -fpredictive-commoning -fgcse-after-reload \
 		   -ftree-loop-distribution -ftree-loop-if-convert -fivopts -fipa-pta -fira-hoist-pressure \
-		   -fno-delete-null-pointer-checks \
+		   -fno-delete-null-pointer-checks -ftree-vectorize \
 		   -fdiagnostics-show-option -Werror \
 		   -fmodulo-sched -fmodulo-sched-allow-regmoves \
-		   -march=armv8-a+crc -fbranch-target-load-optimize \
+		   -march=armv8-a+crc -fbranch-target-load-optimize -fsingle-precision-constant \
 		   -mtune=cortex-a57.cortex-a53 -ffast-math
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
