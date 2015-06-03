@@ -20,7 +20,7 @@
 #undef SSP_FIRMWARE_REVISION_BCM
 #define SSP_FIRMWARE_REVISION_BCM	15042000
 #else // ZERO
-#define SSP_FIRMWARE_REVISION_BCM	15042900
+#define SSP_FIRMWARE_REVISION_BCM	15050701
 #endif
 unsigned int get_module_rev(struct ssp_data *data)
 {

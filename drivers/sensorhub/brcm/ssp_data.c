@@ -344,7 +344,9 @@ int parse_dataframe(struct ssp_data *data, char *pchRcvDataFrame, int iLength)
 		case MSG2AP_INST_GYRO_CAL:
 			pr_err("Gyro caldata received from MCU\n");
 			memcpy(caldata, pchRcvDataFrame + iDataIdx, sizeof(caldata));
+			wake_lock(&data->ssp_wake_lock);
 			save_gyro_caldata(data, caldata);
+			wake_unlock(&data->ssp_wake_lock);
 			iDataIdx += sizeof(caldata);
 			break;
 		}
