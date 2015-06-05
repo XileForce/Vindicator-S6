@@ -1,5 +1,5 @@
 # generic gpio support: platform drivers, dedicated expander chips, etc
-
+CFLAGS_KERNEL := -Wno-error=pointer-to-int-cast
 ccflags-$(CONFIG_DEBUG_GPIO)	+= -DDEBUG
 
 obj-$(CONFIG_GPIO_DEVRES)	+= devres.o
