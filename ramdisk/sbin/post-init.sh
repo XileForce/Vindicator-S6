@@ -50,6 +50,9 @@ echo 2100000 > /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq;
 chmod 444 /dev/erandom
 chmod 444 /dev/frandom
 
+#Free Up More Ram For Apps
+echo 200 > /proc/sys/vm/vfs_cache_pressure
+
 #Fix GPS Wake Issues. From LSpeed Mod 
 mount -o remount,rw /
 mount -o remount,rw rootfs
