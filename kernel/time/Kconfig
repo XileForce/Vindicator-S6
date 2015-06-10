@@ -72,7 +72,7 @@ config NO_HZ_COMMON
 
 choice
 	prompt "Timer tick handling"
-	default NO_HZ_IDLE if NO_HZ
+	default NO_HZ_FULL if NO_HZ
 
 config HZ_PERIODIC
 	bool "Periodic timer ticks (constant rate, no dynticks)"
