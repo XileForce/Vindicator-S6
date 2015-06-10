@@ -46,9 +46,29 @@ echo 2100000 > /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq;
 echo 800000 > /sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq;
 echo 2100000 > /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq;
 
-# e/frandom permissions
+#e/frandom permissions
 chmod 444 /dev/erandom
 chmod 444 /dev/frandom
+
+#Fix GPS Wake Issues. From LSpeed Mod 
+mount -o remount,rw /
+mount -o remount,rw rootfs
+mount -o remount,rw /system
+busybox mount -o remount,rw /
+busybox mount -o remount,rw rootfs
+busybox mount -o remount,rw /system
+
+busybox sleep 40
+su -c "pm enable com.google.android.gms/.update.SystemUpdateActivity"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService$ActiveReceiver"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService$Receiver"
+su -c "pm enable com.google.android.gms/.update.SystemUpdateService$SecretCodeReceiver"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateActivity"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdatePanoActivity"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateService"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateService$Receiver"
+su -c "pm enable com.google.android.gsf/.update.SystemUpdateService$SecretCodeReceiver"
 
 #Setup vindicator file location if it doesn't exist already
 [ ! -d "/data/data/vindicator" ] && mkdir /data/data/vindicator
