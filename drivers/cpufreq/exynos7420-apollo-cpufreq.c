@@ -135,8 +135,8 @@ static int exynos7420_bus_table_CA53[CPUFREQ_LEVEL_END_CA53] = {
 	 543000,		/* 700 MHz */
 	 416000,		/* 600 MHz */
 	 416000,		/* 500 MHz */
-	      0,		/* 400 MHz */
-	      0,		/* 300 MHz */
+	 416000,		/* 400 MHz */
+	 416000,		/* 300 MHz */
 	      0,		/* 200 MHz */
 };
 
